@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: spring-k8s-lab
-          image: spring-k8s-lab:1.0
+          image: spring-k8s-lab:1.1
           ports:
             - containerPort: 8080
           livenessProbe:
