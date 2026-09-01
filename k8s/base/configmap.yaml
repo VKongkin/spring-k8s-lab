@@ -1,0 +1,8 @@
+# k8s/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-k8s-lab-config
+data:
+  APP_GREETING: "Hello from ConfigMap"
+  SPRING_PROFILES_ACTIVE: "k8s"

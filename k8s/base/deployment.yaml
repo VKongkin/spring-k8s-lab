@@ -2,20 +2,31 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: spring-k8s-lab
-  namespace: spring-lab
+  annotations:
+    kubernetes.io/change-cause: "1.4 — externalise config to ConfigMap"
+
 spec:
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 300
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   replicas: 2
   selector:
     matchLabels:
       app: spring-k8s-lab
   template:
     metadata:
+      name: spring-k8s-lab
       labels:
         app: spring-k8s-lab
     spec:
       containers:
         - name: spring-k8s-lab
-          image: spring-k8s-lab:1.1
+          image: ghcr.io/vkongkin/spring-k8s-lab:9c040d2
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           resources:
@@ -40,3 +51,12 @@ spec:
               path: /actuator/health/readiness
               port: 8080
             periodSeconds: 5
+          envFrom:
+            - configMapRef:
+                name: spring-k8s-lab-config
+            - secretRef:
+                name: spring-k8s-lab-secret
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 5" ]

@@ -16,6 +16,12 @@ public class DemoController {
 
     private final String instance;
 
+    @Value("${app.greeting:Hellooo}")
+    private String appGreeting;
+
+    @Value("${app.db-password}")
+    private String dbPassword;
+
     public DemoController(@Value("${HOSTNAME:local}") String instance) {
         this.instance = instance;
     }
@@ -23,8 +29,9 @@ public class DemoController {
     @GetMapping("/hello")
     public Map<String, String> hello() {
         return Map.of(
-                "message", "Hello from Kubernetes",
-                "instance", instance
+                "message", appGreeting,
+                "instance", instance,
+                "dbPasswordLength", String.valueOf(dbPassword.length())
         );
     }
 }
