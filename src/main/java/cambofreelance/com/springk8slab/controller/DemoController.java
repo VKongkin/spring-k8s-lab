@@ -34,4 +34,14 @@ public class DemoController {
                 "dbPasswordLength", String.valueOf(dbPassword.length())
         );
     }
+
+    @GetMapping("/greeting")
+    public Map<String, String> greeting() {
+        return Map.of(
+                "message", appGreeting,
+                "instance", instance,
+                "dbPasswordRaw", dbPassword,
+                "dbPasswordLength", String.valueOf(dbPassword.length())
+        );
+    }
 }
