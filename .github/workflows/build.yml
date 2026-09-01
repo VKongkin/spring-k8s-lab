@@ -35,3 +35,11 @@ jobs:
 
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Bump image tag in Helm values
+        run: |
+          yq -i '.image.tag = "${{ steps.meta.outputs.sha }}"' helm/spring-k8s-lab/values.yaml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add helm/spring-k8s-lab/values.yaml
+          git diff --staged --quiet || git commit -m "chore: bump image to ${{ steps.meta.outputs.sha }} [skip ci]"
+          git push

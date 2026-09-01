@@ -25,8 +25,20 @@ spec:
     spec:
       serviceAccountName: {{ include "spring-k8s-lab.fullname" . }}
       automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
       containers:
         - name: {{ .Chart.Name }}
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ "ALL" ]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -58,3 +70,6 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", "sleep 5"]
+      volumes:
+        - name: tmp
+          emptyDir: { }
