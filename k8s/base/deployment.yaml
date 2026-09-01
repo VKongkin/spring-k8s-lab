@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: spring-k8s-lab
-          image: ghcr.io/vkongkin/spring-k8s-lab:9c040d2
+          image: ghcr.io/vkongkin/spring-k8s-lab:d2fc4b0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

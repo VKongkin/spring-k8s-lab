@@ -5,6 +5,6 @@ resources:
   - ../../base
 images:
   - name: ghcr.io/vkongkin/spring-k8s-lab
-    newTag: 9c040d2
+    newTag: d2fc4b0
 patches:
   - path: patch-replicas.yaml
