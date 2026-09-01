@@ -23,6 +23,8 @@ spec:
       labels:
         {{- include "spring-k8s-lab.selectorLabels" . | nindent 8 }}
     spec:
+      serviceAccountName: {{ include "spring-k8s-lab.fullname" . }}
+      automountServiceAccountToken: false
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
