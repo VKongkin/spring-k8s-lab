@@ -7,7 +7,7 @@ RUN mvn -B clean package -DskipTests
 
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-RUN useradd -u 10001 -m spring && chown -R spring:spring /app
-USER 10001
+COPY --from=build --chown=1000:1000 /src/target/*.jar app.jar
+USER 1000
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]
