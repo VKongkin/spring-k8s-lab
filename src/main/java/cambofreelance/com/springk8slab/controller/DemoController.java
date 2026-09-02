@@ -49,6 +49,6 @@ public class DemoController {
 
     @GetMapping("/test")
     public ResponseEntity<String> test() {
-        return new ResponseEntity<>("Hello from " + instance, HttpStatus.OK);
+        return new ResponseEntity<>("Hello testing from " + instance, HttpStatus.OK);
     }
 }
