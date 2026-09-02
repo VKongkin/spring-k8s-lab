@@ -1,5 +1,6 @@
 package cambofreelance.com.springk8slab.controller;
 
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,10 @@ public class DemoController {
                 "dbPasswordRaw", dbPassword,
                 "dbPasswordLength", String.valueOf(dbPassword.length())
         );
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return new ResponseEntity<>("Hello from " + instance, HttpStatus.OK);
     }
 }
