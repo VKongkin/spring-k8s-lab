@@ -1,14 +1,16 @@
 name: build
+
 on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
     steps:
       - uses: actions/checkout@v4
 
@@ -23,7 +25,7 @@ jobs:
 
       - id: meta
         run: |
-          echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
           echo "owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
 
       - uses: docker/build-push-action@v6
@@ -32,14 +34,24 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ghcr.io/${{ steps.meta.outputs.owner }}/spring-k8s-lab:${{ steps.meta.outputs.sha }}
-
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: Bump image tag in Helm values
+
+  bump-dev:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: testing-bank-org/platform-config
+          token: ${{ secrets.PLATFORM_CONFIG_TOKEN }}
+
+      - name: Bump dev image tag
         run: |
-          yq -i '.image.tag = "${{ steps.meta.outputs.sha }}"' helm/spring-k8s-lab/values.yaml
+          SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          yq -i ".image.tag = \"$SHA\"" values/dev/spring-k8s-lab.yaml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add helm/spring-k8s-lab/values.yaml
-          git diff --staged --quiet || git commit -m "chore: bump image to ${{ steps.meta.outputs.sha }} [skip ci]"
+          git add values/dev/spring-k8s-lab.yaml
+          git diff --staged --quiet || git commit -m "deploy(dev): spring-k8s-lab $SHA"
           git push
