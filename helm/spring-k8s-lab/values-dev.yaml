@@ -1,3 +1,0 @@
-replicaCount: 1
-config:
-  APP_GREETING: "Hello Dev! from helm configuration"

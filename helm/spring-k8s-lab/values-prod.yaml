@@ -1,9 +1,0 @@
-replicaCount: 3
-config:
-  APP_GREETING: "Hello from prod"
-resources:
-  requests:
-    cpu: 500m
-    memory: 1Gi
-  limits:
-    memory: 1536Mi
