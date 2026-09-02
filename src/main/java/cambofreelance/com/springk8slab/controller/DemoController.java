@@ -39,7 +39,7 @@ public class DemoController {
     @GetMapping("/greeting")
     public Map<String, String> greeting(@RequestParam String q) {
         return Map.of(
-                "message", "Mr/Ms "+q+": "+appGreeting,
+                "message", String.format("Mr/Ms %s: %s", q, appGreeting),
                 "instance", instance,
                 "dbPasswordRaw", dbPassword,
                 "dbPasswordLength", String.valueOf(dbPassword.length())
