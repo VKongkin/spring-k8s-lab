@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: ghcr.io/vkongkin/spring-k8s-lab
-  tag: 7a1bb37
+  tag: 1491d1d
   pullPolicy: IfNotPresent
 service:
   type: ClusterIP
